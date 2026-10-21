@@ -1,0 +1,30 @@
+{
+  "title": "The Last Chai at Hill View Hostel",
+  "setting": "A college hostel in Pune during a monsoon power cut, 2026",
+  "victim": {
+    "name": "Professor Arvind Kale",
+    "description": "The strict hostel warden, found collapsed in his office at 11 pm after drinking his evening chai, poisoned."
+  },
+  "intro": "The monsoon knocked out the power at Hill View Hostel at 9 pm. When the lights flickered back at 11, Professor Kale was found slumped over his desk, a half-empty cup of chai beside him.\n\nThe main gate was locked all evening, so the culprit is still inside. Four people had reason to visit the warden's office tonight. You have until morning to find out who.",
+  "suspects": [
+    {"name": "Riya Desai", "role": "Final-year student facing expulsion", "personality": "Sarcastic, quick-witted, hides nerves with jokes", "alibi": "Studying in the library by candlelight all evening", "motive": "Kale was about to expel her for a hostel prank", "secret": "She sneaked out to a friend's party and climbed back over the wall", "is_culprit": false},
+    {"name": "Mohan Pillai", "role": "Hostel cook", "personality": "Gentle, formal, talks about his recipes", "alibi": "Cleaning the kitchen after dinner", "motive": "Kale had accused him of stealing groceries", "secret": "He has been taking leftover food home to his family", "is_culprit": false},
+    {"name": "Dr. Neha Joshi", "role": "Chemistry lecturer and Kale's rival for HOD", "personality": "Calm, precise, slightly condescending", "alibi": "Grading papers in the staff room, never went near his office", "motive": "Kale planned to expose that she faked lab results", "secret": "She mixed the poison from lab supplies and slipped it into his chai during the blackout", "is_culprit": true},
+    {"name": "Kabir Shah", "role": "Hostel secretary and Kale's nephew", "personality": "Eager, talkative, overly helpful", "alibi": "Running the generator in the basement", "motive": "He inherits Kale's flat", "secret": "He owes money to a classmate and asked his uncle for a loan that night", "is_culprit": false}
+  ],
+  "locations": [
+    {"name": "Warden's Office", "description": "Kale's cramped office, papers everywhere, the chai cup still on the desk."},
+    {"name": "Chemistry Lab", "description": "The ground-floor lab, supposedly locked after 6 pm."},
+    {"name": "Staff Room", "description": "Where teachers grade papers; a single candle burned down to a stub."},
+    {"name": "Hostel Kitchen", "description": "Where the evening chai was brewed in one big pot."}
+  ],
+  "clues": [
+    {"location": "Warden's Office", "text": "A faint smell of bitter almonds rises from the chai cup, and a lab-style glass dropper lies under the desk."},
+    {"location": "Warden's Office", "text": "A draft letter on the desk reads: 'To the Principal: I have proof that Dr. Joshi's published results were fabricated.'"},
+    {"location": "Chemistry Lab", "text": "The lab door was unlocked with a key, not forced. The sign-out sheet shows 'N. Joshi, 9:20 pm' in a hurried hand."},
+    {"location": "Staff Room", "text": "The pile of papers Dr. Joshi claims she graded is untouched; the top answer sheet has no marks at all."},
+    {"location": "Hostel Kitchen", "text": "The chai pot is still half full and Mohan drank from it himself, so the poison was added to Kale's cup, not the pot."},
+    {"location": "Hostel Kitchen", "text": "Muddy footprints by the back window belong to someone wearing party sandals, not a teacher's shoes."}
+  ],
+  "solution": "Dr. Neha Joshi poisoned Professor Kale to stop him exposing her fabricated research. During the blackout she took a dropper of poison from the chemistry lab (her 9:20 pm sign-out), slipped it into his cup, and returned to the staff room. Her untouched papers prove she was not grading as she claimed, and the dropper and draft letter tie her to the crime. The muddy footprints were Riya sneaking back from a party."
+}

@@ -1,0 +1,115 @@
+@import url("https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&family=Libre+Baskerville:ital@0;1&display=swap");
+
+:root {
+  --paper: #e8dfcc;
+  --ink-muted: #a99d86;
+  --rule: #3a3227;
+  --card: #201b14;
+  --red: #b5362f;
+}
+
+/* Base type: serif body, typewriter headings and labels */
+html, body, [data-testid="stAppViewContainer"], .stMarkdown, p, li, label, textarea, input {
+  font-family: "Libre Baskerville", Georgia, serif;
+}
+h1, h2, h3, h4, .stTabs button[role="tab"] p, [data-testid="stMetricValue"] {
+  font-family: "Special Elite", "Courier New", monospace !important;
+  letter-spacing: 0.02em;
+  font-weight: 400 !important;
+}
+h1 { font-size: 2.4rem !important; line-height: 1.15 !important; }
+h3 { font-size: 1.2rem !important; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); }
+.block-container { max-width: 980px; padding-top: 2.5rem; }
+header[data-testid="stHeader"] { background: transparent; }
+
+/* Buttons look like typed labels, not app chrome */
+.stButton button, [data-testid="stFormSubmitButton"] button {
+  font-family: "Courier Prime", monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 2px;
+  border: 1px solid var(--rule);
+}
+.stButton button[kind="primary"], [data-testid="stFormSubmitButton"] button[kind="primaryFormSubmit"] {
+  border-color: var(--red);
+}
+input, textarea, [data-baseweb="select"] > div { border-radius: 2px !important; }
+[data-testid="stForm"], [data-testid="stExpander"] details, [data-testid="stVerticalBlockBorderWrapper"] {
+  border-radius: 2px !important;
+  border-color: var(--rule) !important;
+}
+
+/* Tabs as file dividers */
+.stTabs [data-baseweb="tab-list"] { gap: 0; border-bottom: 1px solid var(--rule); }
+.stTabs button[role="tab"] { padding: 0.5rem 1.2rem; }
+.stTabs button[role="tab"] p { font-size: 1.05rem; }
+
+/* Sidebar = the detective's notebook */
+[data-testid="stSidebar"] { background: #1c1812; border-right: 1px solid var(--rule); }
+[data-testid="stSidebar"] h2 { font-size: 1.3rem; }
+
+/* Masthead */
+.file-label {
+  font-family: "Courier Prime", monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.6rem;
+  display: flex;
+  justify-content: space-between;
+}
+.setting { font-style: italic; color: var(--ink-muted); margin-top: -0.6rem; }
+
+/* Small, quiet provenance labels */
+.source {
+  font-family: "Courier Prime", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin: 0.3rem 0 0.8rem;
+}
+.source b { color: var(--paper); border: 1px solid var(--ink-muted); padding: 0 0.35rem; margin-right: 0.4rem; font-weight: 400; }
+
+/* Evidence exhibits */
+.exhibit { border-left: 3px solid var(--red); background: var(--card); padding: 0.6rem 0.9rem; margin: 0.5rem 0; }
+.exhibit .tag {
+  font-family: "Courier Prime", monospace; font-size: 0.72rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--ink-muted); display: block; margin-bottom: 0.2rem;
+}
+.exhibit.small { padding: 0.45rem 0.7rem; font-size: 0.88rem; }
+
+/* Interview transcript */
+.transcript { border-top: 1px dashed var(--rule); margin: 0.8rem 0; }
+.transcript .line { display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.8rem; padding: 0.55rem 0; border-bottom: 1px dashed var(--rule); }
+.transcript .who { font-family: "Courier Prime", monospace; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-muted); padding-top: 0.15rem; }
+.transcript .q { font-family: "Courier Prime", monospace; }
+.transcript .a { font-style: italic; }
+
+/* Suspect dossier */
+.dossier { background: var(--card); border: 1px solid var(--rule); padding: 0.9rem 1.1rem; margin: 0.4rem 0 0.6rem; }
+.dossier .name { font-family: "Special Elite", monospace; font-size: 1.35rem; }
+.dossier .role { font-family: "Courier Prime", monospace; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.78rem; color: var(--ink-muted); }
+
+/* Verdict stamp */
+.stamp {
+  display: inline-block;
+  font-family: "Special Elite", monospace;
+  font-size: 2.6rem;
+  letter-spacing: 0.15em;
+  padding: 0.2rem 1.2rem;
+  border: 4px double currentColor;
+  transform: rotate(-4deg);
+  margin: 0.6rem 0 1rem;
+}
+.stamp.solved { color: #6f9a62; }
+.stamp.unsolved { color: var(--red); }
+.verdict { font-size: 1.05rem; }
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.8rem !important; }
+  .transcript .line { grid-template-columns: 1fr; gap: 0.2rem; }
+}
