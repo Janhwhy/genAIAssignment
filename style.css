@@ -113,3 +113,8 @@ input, textarea, [data-baseweb="select"] > div { border-radius: 2px !important; 
   h1 { font-size: 1.8rem !important; }
   .transcript .line { grid-template-columns: 1fr; gap: 0.2rem; }
 }
+
+/* Start screen choices and the ending rank */
+[data-testid="stPills"] button, [data-testid="stSegmentedControl"] button,
+[data-testid="stButtonGroup"] button { border-radius: 2px !important; font-family: "Courier Prime", monospace; }
+.rank { font-family: "Special Elite", monospace; font-size: 1.3rem; margin: -0.4rem 0 0.8rem; }

@@ -3,6 +3,21 @@
 DIFFICULTY_TURNS = {"Easy": 15, "Normal": 12, "Hard": 8}
 MAX_QUESTION_LENGTH = 300
 
+# Each crime type: what the case's "victim" field means, and how the crime is described to the AI
+CRIMES = {
+    "Murder": {"victim_label": "The victim",
+               "brief": "a murder. The victim is found dead (non-graphic: poison, a fall, a blow to the head)."},
+    "Theft": {"victim_label": "Robbed",
+              "brief": "a high-value theft. The 'victim' is the owner; describe what was stolen and when it was "
+                       "found missing."},
+    "Disappearance": {"victim_label": "Missing",
+                      "brief": "a disappearance. The 'victim' is a person who vanished; they are alive but were "
+                               "lured away or hidden by the culprit. Describe when they were last seen."},
+    "Sabotage": {"victim_label": "Sabotaged",
+                 "brief": "an act of sabotage. The 'victim' is the person or team whose big moment was ruined; "
+                          "describe what was damaged and when it was discovered."},
+}
+
 
 def validate_case(case):
     """Check that an AI-generated case is complete and solvable. Returns a list of problems."""
@@ -83,6 +98,17 @@ def clean_question(text):
     return text
 
 
+def with_evidence(state, question, exhibit):
+    """Attach a found clue the detective shows the suspect. exhibit is an index into found_clues, or None."""
+    if exhibit is None:
+        return clean_question(question)
+    if not 0 <= exhibit < len(state["found_clues"]):
+        raise ValueError("You can only show evidence you have found.")
+    question = (question or "").strip() or "What can you tell me about this?"
+    clue = state["found_clues"][exhibit]
+    return clean_question(f"[Shows Exhibit {chr(65 + exhibit)}: {clue['text']}] {question}"[:MAX_QUESTION_LENGTH])
+
+
 def record_answer(state, suspect_name, question, answer):
     """Called only after the AI answered, so a failed AI call never costs a turn."""
     if suspect_name not in state["transcripts"]:
@@ -126,3 +152,15 @@ def score(state):
     if state["status"] != "won":
         return 0
     return 100 + 10 * state["turns_left"]
+
+
+def rank(state):
+    """A title for the ending screen, based on the share of turns left so every difficulty is fair."""
+    if state["status"] != "won":
+        return "Back to the academy"
+    spare = state["turns_left"] / state["max_turns"]
+    if spare >= 0.5:
+        return "Master Detective"
+    if spare >= 0.25:
+        return "Inspector"
+    return "Constable"

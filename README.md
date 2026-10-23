@@ -2,10 +2,12 @@
 
 Janhavi Bhattad · Activity-Based Assessment, Generative AI in Gaming
 
-AI Detective is a small murder-mystery game. You type in a place, say "a Bollywood film set" or "a hostel during
-a power cut", and a language model writes a new case set there. Each case has a victim, four suspects, four
-locations to search and a hidden solution. You question the suspects, look for evidence and then name the killer.
-Since every case is written on the spot, no two games are the same.
+AI Detective is a small mystery game. You pick a setting and a crime, and a language model writes a new case
+for you. There are eight ready-made settings, such as a Bollywood film set, an IPL final, a royal wedding or a
+Mars base. You can also type your own idea, or press "Surprise me" and let the AI choose. The crime can be a
+murder, a theft, a disappearance or a sabotage. Each case has four suspects, four locations to search and a
+hidden solution. You question the suspects, look for evidence and then name the culprit. Since every case is
+written on the spot, no two games are the same.
 
 ## How the game works
 
@@ -15,14 +17,16 @@ You get a fixed number of turns: 15 on Easy, 12 on Normal, 8 on Hard. Each of th
 - searching a location, which reveals any clues hidden there,
 - asking your partner for a hint.
 
-Each suspect is played by the AI. The innocent ones tell the truth about the murder, though they might hide
-some unrelated personal secret. The killer lies and sticks to their alibi. But if you bring up a clue that
-contradicts their story, they get defensive and slip up a bit. Most of the fun is in catching that.
+Each suspect is played by the AI. The innocent ones tell the truth about the crime, though they might hide
+some unrelated personal secret. The culprit lies and sticks to their alibi. When you question someone, you can
+also show them a piece of evidence you've found. An innocent suspect explains it honestly, but the culprit
+comes up with an excuse that doesn't quite fit. Most of the fun is in catching that.
 
 Once you think you know, open the Accuse tab, pick a suspect and explain your reasoning. Making the accusation
 doesn't cost a turn, but it ends the game. If you're right you score 100 points plus 10 for every turn you had left.
 If you're wrong you score 0. Either way the AI writes the final scene and grades your reasoning as Sharp, Lucky
-or Off track. Run out of turns and all you can do is accuse.
+or Off track. You also get a rank, based on how many turns you had left: Master Detective, Inspector or
+Constable. Run out of turns and all you can do is accuse.
 
 ## Tools
 
@@ -54,17 +58,19 @@ The tests don't need a key, because the AI is replaced with fixed replies: `pyth
 
 All the AI calls live in `ai.py`. The AI is used in four places, and each one runs while you're playing:
 
-1. Writing the case (`generate_case`). The model gets the player's setting and returns the whole case as
-   JSON. A model can return a broken case, for example two killers or a clue in a room that doesn't exist.
+1. Writing the case (`generate_case`). The model gets the player's setting and the type of crime, and returns
+   the whole case as JSON. A model can return a broken case, for example two culprits or a clue in a room that
+   doesn't exist.
    So `validate_case` in `game.py` checks it first, and if something is wrong the game asks the model once more.
 2. Playing the suspects (`interrogate`). Every question is sent with that suspect's personality, alibi, secret
    and whether they're guilty. It also includes everything said in the interview so far and the clues the player
-   has already found. That last part is what lets the killer react when you confront them with evidence.
+   has already found. If the player shows them an exhibit, it is attached to the question in [brackets], and
+   the prompt tells the suspect to react to that specific piece of evidence.
 3. The partner's hints (`partner_hint`). The model is given the solution plus what the player has and hasn't
-   done, and is told to point them in a useful direction without naming the killer.
+   done, and is told to point them in a useful direction without naming the culprit.
 4. The ending (`write_ending`). The model writes the reveal scene and grades the player's explanation.
 
-Everything the AI writes has a small "AI-written" label on screen. The backup case is marked "Hand-written".
+Everything the AI writes has a small "AI-written" label on screen. The backup cases are marked "Hand-written".
 
 ## Handling errors
 
@@ -74,23 +80,23 @@ Everything the AI writes has a small "AI-written" label on screen. The backup ca
   short message explaining what happened instead of crashing. The Groq library already retries network errors and
   rate limits a couple of times.
 - If an AI call fails, you don't lose the turn.
-- If the AI can't be reached at all, there's a hand-written backup case (`backup_case.json`) so the game can
-  still be shown. If only the ending fails, the plain solution is shown instead.
+- If the AI can't be reached at all, there are three hand-written backup cases (`backup_cases.json`: a murder,
+  a theft and a sabotage) so the game can still be shown. If only the ending fails, the plain solution is shown instead.
 
 ## Files
 
 - `app.py`: the screens (start, investigation, ending)
 - `ai.py`: the prompts and every call to Groq
 - `game.py`: the rules (turns, searching, accusing, scoring, checking AI cases). No AI code in here, so it can be tested on its own
-- `backup_case.json`: the hand-written backup case
+- `backup_cases.json`: three hand-written backup cases
 - `style.css` and `.streamlit/config.toml`: the case-file look
 - `test_game.py`: tests, including one that plays a whole game through the interface
 
 ## Demo plan
 
-1. Enter a setting, e.g. "a cricket stadium during the IPL final", and open the case file.
+1. Pick a setting card (or type your own idea), choose a crime, and open the case file.
 2. Search a couple of locations so some evidence shows up in the notebook.
-3. Ask a suspect where they were, then mention one of the clues and watch the answer change.
+3. Ask a suspect where they were. Then ask again, this time showing them an exhibit, and watch the answer change.
 4. Ask the partner for a hint.
 5. Accuse someone, give a reason, and show the ending and the grade.
 6. To show error handling, submit an empty question. Or rename `.env`, start a new game, and show the error

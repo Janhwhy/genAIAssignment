@@ -1,9 +1,10 @@
-"""AI Detective: a murder-mystery game whose cases, suspects' dialogue, hints and endings are written by Generative AI.
+"""AI Detective: a mystery game whose cases, suspects' dialogue, hints and endings are written by Generative AI.
 
 Run with:  streamlit run app.py
 """
 
 import json
+import random
 import zlib
 from html import escape
 from pathlib import Path
@@ -14,7 +15,20 @@ import ai
 import game
 
 HERE = Path(__file__).parent
-BACKUP_CASE = HERE / "backup_case.json"
+BACKUP_CASES = HERE / "backup_cases.json"
+
+# Ready-made settings shown as cards on the start screen; the AI builds the case around the one picked
+SCENARIOS = {
+    "Bollywood film set": "the set of a big-budget Bollywood film in Mumbai, the night before the final shoot",
+    "IPL final": "the team hotel in Ahmedabad on the night of the IPL final",
+    "Royal wedding": "a lavish three-day wedding in a Rajasthan palace",
+    "Monsoon night train": "an overnight train from Mumbai to Goa, stuck in heavy monsoon rain",
+    "College tech fest": "a college tech fest in Pune, the night before the hackathon finals",
+    "Mars research base": "a six-person research base on Mars in the year 2089",
+    "Startup launch": "a Bengaluru startup office the night before a big product launch",
+    "Hill station hotel": "an old colonial hotel in Shimla during a snowstorm",
+}
+SURPRISE, OWN_IDEA = "Surprise me", "My own idea"
 
 st.set_page_config(page_title="Case File: AI Detective", page_icon="🔍", layout="centered")
 st.markdown(f"<style>{(HERE / 'style.css').read_text()}</style>", unsafe_allow_html=True)
@@ -61,36 +75,42 @@ def start_screen():
     masthead(None, "New investigation")
     st.title("AI Detective")
     st.write(
-        "Name a place and a new murder is written for you: a victim, four suspects with alibis and secrets, "
-        "and the evidence that gives the killer away. Question the suspects in your own words, search the scene, "
-        "and name the killer before your time runs out."
+        "Pick a setting and a crime, and a new case is written for you: four suspects with alibis and secrets, "
+        "and the evidence that gives the culprit away. Question the suspects in your own words, show them "
+        "what you find, and name the culprit before your time runs out."
     )
     html('<p class="source"><b>AI-written</b>every case is generated live by GPT-OSS 120B on Groq</p>')
     show_flash()
-    with st.form("new_case"):
-        theme = st.text_input(
-            "Where does it happen? (optional)",
-            placeholder="a Bollywood film set, a Mars research base, an IPL team hotel...",
-            max_chars=150,
+
+    with st.container(border=True):
+        pick = st.pills("Where does it happen?", [SURPRISE, *SCENARIOS, OWN_IDEA], default=SURPRISE)
+        theme = ""
+        if pick == OWN_IDEA:
+            theme = st.text_input("Describe your setting", max_chars=150,
+                                  placeholder="a houseboat in Kerala, a K-pop concert, an Antarctic station...")
+        elif pick in SCENARIOS:
+            theme = SCENARIOS[pick]
+        crime = st.segmented_control("The crime", list(game.CRIMES), default="Murder")
+        difficulty = st.segmented_control(
+            "Time on the case", list(game.DIFFICULTY_TURNS), default="Normal",
+            format_func=lambda d: f"{d} · {game.DIFFICULTY_TURNS[d]} turns",
         )
-        difficulty = st.radio(
-            "Time on the case", list(game.DIFFICULTY_TURNS), index=1, horizontal=True,
-            format_func=lambda d: f"{d}: {game.DIFFICULTY_TURNS[d]} turns",
-        )
-        start = st.form_submit_button("Open the case file", type="primary")
-    if start:
-        with st.spinner("Writing your case..."):
-            try:
-                case = ai.generate_case(theme)
-            except ai.AIError as e:
-                flash("error", f"{e} You can retry, or play the backup case below.")
+        if st.button("Open the case file", type="primary"):
+            if pick == OWN_IDEA and not theme.strip():
+                flash("warning", "Describe your setting first, or pick one of the cards.")
             else:
-                st.session_state.game = game.new_game(case, difficulty)
-        st.rerun()
+                with st.spinner("Writing your case..."):
+                    try:
+                        case = ai.generate_case(theme, crime or "Murder")
+                    except ai.AIError as e:
+                        flash("error", f"{e} You can retry, or play a backup case below.")
+                    else:
+                        st.session_state.game = game.new_game(case, difficulty or "Normal")
+            st.rerun()
 
     st.write("")
-    if st.button("Play the backup case", help="A hand-written case for when the AI service is unavailable."):
-        case = json.loads(BACKUP_CASE.read_text())
+    if st.button("Play a backup case", help="One of three hand-written cases, for when the AI service is unavailable."):
+        case = random.choice(json.loads(BACKUP_CASES.read_text()))
         st.session_state.game = game.new_game(case, "Normal", offline=True)
         st.rerun()
 
@@ -139,16 +159,24 @@ def interrogate_tab(state):
     else:
         st.caption(f"No interview with {name} on record yet.")
 
+    found = state["found_clues"]
     with st.form(f"ask_{name}", clear_on_submit=True):
         question = st.text_input(
             f"Question for {name} (costs 1 turn)",
-            placeholder="Where were you when the victim died?",
+            placeholder="Where were you when it happened?",
             max_chars=game.MAX_QUESTION_LENGTH,
+        )
+        exhibit_pick = st.selectbox(
+            "Show them evidence (optional)", [None, *range(len(found))],
+            format_func=lambda i: "Don't show anything" if i is None
+            else f"Exhibit {chr(65 + i)}: {found[i]['text'][:70]}...",
+            disabled=not found,
+            help="Confront the suspect with a clue you found. The culprit struggles to explain evidence against them.",
         )
         asked = st.form_submit_button("Ask", disabled=not game.can_act(state))
     if asked:
         try:
-            question = game.clean_question(question)
+            question = game.with_evidence(state, question, exhibit_pick)
             with st.spinner(f"{name} considers the question..."):
                 answer = ai.interrogate(state, name, question)
             game.record_answer(state, name, question, answer)
@@ -194,9 +222,9 @@ def partner_tab(state):
 
 
 def accuse_tab(state):
-    st.write("Name the killer. There is no second chance.")
+    st.write("Name the culprit. There is no second chance.")
     with st.form("accuse"):
-        name = st.selectbox("The killer is", [s["name"] for s in state["case"]["suspects"]])
+        name = st.selectbox("The culprit is", [s["name"] for s in state["case"]["suspects"]])
         reasoning = st.text_area("Your reasoning (it will be graded)", max_chars=600,
                                  placeholder="Which evidence breaks their story?")
         sure = st.checkbox("This is my final accusation.")
@@ -219,14 +247,15 @@ def playing_screen(state):
     sidebar(state)
     masthead(state, "Open investigation")
     st.title(case["title"])
-    html(f'<p class="setting">{escape(case["setting"])}</p>')
+    html(f'<p class="setting">{escape(case.get("crime", "Murder"))} · {escape(case["setting"])}</p>')
     show_flash()
     with st.expander("Briefing", expanded=state["turns_left"] == state["max_turns"]):
-        st.markdown(f"**The victim:** {case['victim']['name']}. {case['victim']['description']}")
+        label = game.CRIMES[case.get("crime", "Murder")]["victim_label"]
+        st.markdown(f"**{label}:** {case['victim']['name']}. {case['victim']['description']}")
         st.write(case["intro"])
         source_note(state, "case, victim and suspects")
     if not game.can_act(state):
-        st.warning("You are out of turns. Open the Accuse tab and name the killer.")
+        st.warning("You are out of turns. Open the Accuse tab and name the culprit.")
 
     # A key makes the open tab survive the rerun that follows every action
     tabs = st.tabs(["Interrogate", "Search", "Partner", "Accuse"], key="tab", on_change="rerun")
@@ -250,11 +279,12 @@ def ending_screen(state):
     show_flash()
     if state["status"] == "won":
         html('<div class="stamp solved">SOLVED</div>')
-        html(f'<p class="verdict">Case solved. {escape(real)} was the killer.</p>')
+        html(f'<p class="verdict">Case solved. {escape(real)} was the culprit.</p>')
     else:
         html('<div class="stamp unsolved">UNSOLVED</div>')
-        html(f'<p class="verdict">You accused {escape(state["accused"])}. The killer was {escape(real)}.</p>')
+        html(f'<p class="verdict">You accused {escape(state["accused"])}. The culprit was {escape(real)}.</p>')
 
+    html(f'<p class="rank">Rank: {escape(game.rank(state))}</p>')
     col1, col2, col3 = st.columns(3)
     col1.metric("Score", game.score(state))
     col2.metric("Turns used", state["max_turns"] - state["turns_left"])
