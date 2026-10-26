@@ -67,27 +67,33 @@
   "clues": [
    {
     "location": "Warden's Office",
-    "text": "A faint smell of bitter almonds rises from the chai cup, and a lab-style glass dropper lies under the desk."
+    "text": "A faint smell of bitter almonds rises from the chai cup, and a lab-style glass dropper lies under the desk.",
+    "points_to": "Dr. Neha Joshi"
    },
    {
     "location": "Warden's Office",
-    "text": "A draft letter on the desk reads: 'To the Principal: I have proof that Dr. Joshi's published results were fabricated.'"
+    "text": "A draft letter on the desk reads: 'To the Principal: I have proof that Dr. Joshi's published results were fabricated.'",
+    "points_to": "Dr. Neha Joshi"
    },
    {
     "location": "Chemistry Lab",
-    "text": "The lab door was unlocked with a key, not forced. The sign-out sheet shows 'N. Joshi, 9:20 pm' in a hurried hand."
+    "text": "The lab door was unlocked with a key, not forced. The sign-out sheet shows 'N. Joshi, 9:20 pm' in a hurried hand.",
+    "points_to": "Dr. Neha Joshi"
    },
    {
     "location": "Staff Room",
-    "text": "The pile of papers Dr. Joshi claims she graded is untouched; the top answer sheet has no marks at all."
+    "text": "The pile of papers Dr. Joshi claims she graded is untouched; the top answer sheet has no marks at all.",
+    "points_to": "Dr. Neha Joshi"
    },
    {
     "location": "Hostel Kitchen",
-    "text": "The chai pot is still half full and Mohan drank from it himself, so the poison was added to Kale's cup, not the pot."
+    "text": "The chai pot is still half full and Mohan drank from it himself, so the poison was added to Kale's cup, not the pot.",
+    "points_to": null
    },
    {
     "location": "Hostel Kitchen",
-    "text": "Muddy footprints by the back window belong to someone wearing party sandals, not a teacher's shoes."
+    "text": "Muddy footprints by the back window belong to someone wearing party sandals, not a teacher's shoes.",
+    "points_to": "Riya Desai"
    }
   ],
   "solution": "Dr. Neha Joshi poisoned Professor Kale to stop him exposing her fabricated research. During the blackout she took a dropper of poison from the chemistry lab (her 9:20 pm sign-out), slipped it into his cup, and returned to the staff room. Her untouched papers prove she was not grading as she claimed, and the dropper and draft letter tie her to the crime. The muddy footprints were Riya sneaking back from a party."
@@ -160,23 +166,28 @@
   "clues": [
    {
     "location": "Main Gallery",
-    "text": "Fresh flecks of conservator's wax on the frame's back edge, the kind used to re-seat canvases."
+    "text": "Fresh flecks of conservator's wax on the frame's back edge, the kind used to re-seat canvases.",
+    "points_to": "Tanya Mehra"
    },
    {
     "location": "Basement Workshop",
-    "text": "An extra-wide tube of restoration paper is stamped 'T. Mehra - outgoing shipment', far heavier than paper alone should be."
+    "text": "An extra-wide tube of restoration paper is stamped 'T. Mehra - outgoing shipment', far heavier than paper alone should be.",
+    "points_to": "Tanya Mehra"
    },
    {
     "location": "Basement Workshop",
-    "text": "Tanya's tool bag is still unpacked, and the workshop light timer shows it was switched off from 8:50 to 9:40 pm."
+    "text": "Tanya's tool bag is still unpacked, and the workshop light timer shows it was switched off from 8:50 to 9:40 pm.",
+    "points_to": "Tanya Mehra"
    },
    {
     "location": "Guard Room",
-    "text": "The CCTV log has a 20-minute gap at 9:05 pm; the recording was paused manually, not by a power cut."
+    "text": "The CCTV log has a 20-minute gap at 9:05 pm; the recording was paused manually, not by a power cut.",
+    "points_to": "Kiran Das"
    },
    {
     "location": "Loading Bay",
-    "text": "Cigarette ends and Rahul's lighter lie by the door, but the outgoing crate seal is unbroken."
+    "text": "Cigarette ends and Rahul's lighter lie by the door, but the outgoing crate seal is unbroken.",
+    "points_to": "Rahul Sen"
    }
   ],
   "solution": "Tanya Mehra stole the painting. While everyone listened to the 9 pm speech, she paused the CCTV while the guard dozed, used conservator's wax to re-seat the printed replica in the frame, and rolled the real canvas into a tube of restoration paper labelled for shipment. Her workshop light was off during the theft and her bag was never packed, breaking her alibi. Rahul's cigarettes are only a red herring."
@@ -249,23 +260,28 @@
   "clues": [
    {
     "location": "Robotics Lab",
-    "text": "The reset was started from the laptop's admin account, whose password only Team Nova members know."
+    "text": "The reset was started from the laptop's admin account, whose password only Team Nova members know.",
+    "points_to": "Meera Iyer"
    },
    {
     "location": "Robotics Lab",
-    "text": "A 3D printer still holds a half-finished toy dinosaur, started at 1:05 am."
+    "text": "A 3D printer still holds a half-finished toy dinosaur, started at 1:05 am.",
+    "points_to": "Prof. Suresh Rao"
    },
    {
     "location": "Access Control Room",
-    "text": "Card log: Rao 1:00 am, I. Meera 2:12 am, Khan in and out all night. Aditya's card never entered the block."
+    "text": "Card log: Rao 1:00 am, I. Meera 2:12 am, Khan in and out all night. Aditya's card never entered the block.",
+    "points_to": "Meera Iyer"
    },
    {
     "location": "Server Room",
-    "text": "The projector history shows a cricket stream running from midnight to 3 am."
+    "text": "The projector history shows a cricket stream running from midnight to 3 am.",
+    "points_to": "Faizal Khan"
    },
    {
     "location": "Girls' Hostel Gate",
-    "text": "The late-entry book shows Meera Iyer signing back in at 2:47 am, though she says she was asleep from midnight."
+    "text": "The late-entry book shows Meera Iyer signing back in at 2:47 am, though she says she was asleep from midnight.",
+    "points_to": "Meera Iyer"
    }
   ],
   "solution": "Meera Iyer sabotaged her own team. Angry at being left out of the credit, she used her card to enter the lab at 2:12 am, reset the laptop with the team's admin password and snapped the backup drive, then signed back into the hostel at 2:47 am. The card log and the hostel book break her alibi. The professor's 3D print and Faizal's cricket stream are red herrings."

@@ -118,3 +118,83 @@ input, textarea, [data-baseweb="select"] > div { border-radius: 2px !important; 
 [data-testid="stPills"] button, [data-testid="stSegmentedControl"] button,
 [data-testid="stButtonGroup"] button { border-radius: 2px !important; font-family: "Courier Prime", monospace; }
 .rank { font-family: "Special Elite", monospace; font-size: 1.3rem; margin: -0.4rem 0 0.8rem; }
+
+/* ---------- Hero ---------- */
+.hero { margin: 0.4rem 0 0.6rem; }
+.hero .kicker {
+  font-family: "Courier Prime", monospace; text-transform: uppercase; letter-spacing: 0.3em;
+  font-size: 0.78rem; color: var(--red);
+}
+h1.whodunit {
+  font-family: "Special Elite", monospace !important; font-size: 4.2rem !important; line-height: 1 !important;
+  margin: 0.2rem 0 0 !important; padding: 0 !important; text-shadow: 3px 3px 0 #000; color: var(--paper) !important;
+}
+h1.whodunit span { color: var(--red) !important; }
+
+/* Career stats strip */
+.career { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--rule); margin: 0.8rem 0; }
+.career div { padding: 0.55rem 0.4rem; text-align: center; border-right: 1px solid var(--rule); }
+.career div:last-child { border-right: 0; }
+.career .num { display: block; font-family: "Special Elite", monospace; font-size: 1.6rem; }
+.career .lbl { font-family: "Courier Prime", monospace; font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted); }
+
+/* ---------- Turn pips and HUD ---------- */
+.pips { display: flex; flex-wrap: wrap; gap: 4px; }
+.pip { width: 12px; height: 12px; border: 1px solid var(--ink-muted); transform: rotate(45deg); display: inline-block; }
+.pip.on { background: var(--paper); border-color: var(--paper); }
+.hud {
+  display: flex; align-items: center; gap: 0.8rem; margin: 0.2rem 0 0.8rem;
+  font-family: "Courier Prime", monospace; text-transform: uppercase; letter-spacing: 0.15em; font-size: 0.78rem; color: var(--ink-muted);
+}
+.hud b { font-family: "Special Elite", monospace; font-size: 1.3rem; color: var(--paper); letter-spacing: 0; }
+.turns-label { font-family: "Courier Prime", monospace; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; margin-bottom: 0.4rem; }
+.turns-label b { font-family: "Special Elite", monospace; font-size: 1.4rem; }
+
+/* The culprit is on the move */
+.alarm {
+  border: 1px solid var(--red); background: rgba(181, 54, 47, 0.15); padding: 0.6rem 0.9rem; margin-bottom: 0.8rem;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse { 50% { box-shadow: 0 0 0 4px rgba(181, 54, 47, 0.25); } }
+
+/* ---------- Suspects ---------- */
+.dossier .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.4rem; }
+.nerve { text-align: right; font-family: "Courier Prime", monospace; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted); }
+.nerve span { display: block; margin-bottom: 0.25rem; }
+.bar { display: inline-block; width: 26px; height: 8px; margin-left: 3px; border: 1px solid var(--red); }
+.bar.on { background: var(--red); }
+.crack-banner {
+  border: 2px solid var(--red); padding: 0.7rem 1rem; margin-bottom: 0.8rem; background: rgba(181, 54, 47, 0.12);
+  animation: slam 0.35s ease-out;
+}
+.crack-banner b { display: block; font-family: "Special Elite", monospace; font-size: 1.6rem; color: var(--red); }
+.exhibit.confession { border-left-color: #d9a441; }
+
+/* ---------- Locations ---------- */
+.loc { font-family: "Libre Baskerville", Georgia, serif; }
+.loc b { font-size: 1.05rem; margin-right: 0.6rem; }
+.badge { font-family: "Courier Prime", monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.05rem 0.45rem; border: 1px solid; }
+.badge.sealed { color: var(--ink-muted); }
+.badge.risk { color: var(--red); }
+.burned { color: var(--ink-muted); font-style: italic; margin: 0.4rem 0; }
+
+/* ---------- Accusation and ending ---------- */
+.board-points { font-family: "Courier Prime", monospace; font-size: 0.82rem; color: var(--ink-muted); margin-bottom: 0.6rem; }
+.board-points b { color: var(--paper); }
+.stamp { animation: slam 0.45s cubic-bezier(.2, 1.6, .4, 1); }
+@keyframes slam { from { transform: scale(2.2) rotate(-12deg); opacity: 0; } }
+.stars { font-size: 2.4rem; color: #d9a441; letter-spacing: 0.2em; margin: -0.6rem 0 0.4rem; }
+.stars span { color: var(--rule); }
+table.breakdown { width: 100%; border-collapse: collapse; font-family: "Courier Prime", monospace; margin: 0.6rem 0; }
+table.breakdown td { padding: 0.35rem 0.2rem; border-bottom: 1px dashed var(--rule); }
+table.breakdown td:last-child { text-align: right; }
+table.breakdown tr.miss { color: var(--ink-muted); }
+table.breakdown tr.total td { border-bottom: 0; border-top: 1px solid var(--paper); font-weight: 700; font-size: 1.1rem; }
+
+@media (max-width: 640px) {
+  h1.whodunit { font-size: 3rem !important; }
+  .career .num { font-size: 1.2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .alarm, .stamp, .crack-banner { animation: none; }
+}

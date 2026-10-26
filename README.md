@@ -13,20 +13,39 @@ written on the spot, no two games are the same.
 
 You get a fixed number of turns: 15 on Easy, 12 on Normal, 8 on Hard. Each of these actions uses up one turn:
 
-- asking a suspect a question (you type whatever you want to ask),
+- asking a suspect a question (type your own, or tap one of the quick questions),
 - searching a location, which reveals any clues hidden there,
 - asking your partner for a hint.
 
 Each suspect is played by the AI. The innocent ones tell the truth about the crime, though they might hide
 some unrelated personal secret. The culprit lies and sticks to their alibi. When you question someone, you can
 also show them a piece of evidence you've found. An innocent suspect explains it honestly, but the culprit
-comes up with an excuse that doesn't quite fit. Most of the fun is in catching that.
+comes up with an excuse that doesn't quite fit. Most of the fun is in catching that. Answers stream in word
+by word, so you're never staring at a spinner.
 
-Once you think you know, open the Accuse tab, pick a suspect and explain your reasoning. Making the accusation
-doesn't cost a turn, but it ends the game. If you're right you score 100 points plus 10 for every turn you had left.
-If you're wrong you score 0. Either way the AI writes the final scene and grades your reasoning as Sharp, Lucky
-or Off track. You also get a rank, based on how many turns you had left: Master Detective, Inspector or
-Constable. Run out of turns and all you can do is accuse.
+The case also fights back while you work. These rules are plain Python in `game.py`, not AI:
+
+- **Nerve.** Every suspect has a nerve meter. Show them evidence that really points at them and it goes up.
+  After two different pieces they crack, and their secret is logged as a free exhibit. An innocent's secret
+  explains away the red herring; the culprit's secret is how they did it.
+- **The sealed room.** The location with the most evidence against the culprit starts sealed. Log two pieces of
+  evidence and you get a warrant to search it.
+- **A witness.** A third of the way through, a witness comes forward with a free clue.
+- **The clean-up.** Halfway through, someone heads for a location you haven't searched yet. Get there within
+  two turns or one piece of evidence is destroyed.
+
+Each clue in a case is tagged with the suspect it casts suspicion on (`points_to`), which is what drives these rules.
+
+Once you think you know, open the Accuse tab and fill in the deduction board: who did it, why (pick the motive)
+and which exhibit proves it. You can also explain your reasoning in your own words. Making the accusation
+doesn't cost a turn, but it ends the game. If you're right you score 100, plus 40 for the motive, 40 for the key
+evidence, 10 for every turn you had left and 20 if you never asked for a hint. If you're wrong you score 0. You
+earn up to three stars (culprit, motive, evidence) and a rank: Master Detective (three stars with a quarter of
+your turns left), Inspector (two stars) or Constable. The AI writes the final scene and grades your reasoning as
+Sharp, Lucky or Off track. Run out of turns and all you can do is accuse.
+
+Your results are saved to `case_history.json`, so the start screen shows your career: cases played, solved,
+best score and your current winning streak.
 
 ## Tools
 
@@ -78,7 +97,7 @@ Everything the AI writes has a small "AI-written" label on screen. The backup ca
   you can't take actions once your turns are used up. You also have to tick a confirmation box before accusing.
 - If the API key is missing or wrong, if you hit Groq's rate limit, or if the internet drops, the game shows a
   short message explaining what happened instead of crashing. The Groq library already retries network errors and
-  rate limits a couple of times.
+  rate limits a couple of times. If Groq rejects a generated case as broken JSON, the game asks once more.
 - If an AI call fails, you don't lose the turn.
 - If the AI can't be reached at all, there are three hand-written backup cases (`backup_cases.json`: a murder,
   a theft and a sabotage) so the game can still be shown. If only the ending fails, the plain solution is shown instead.
