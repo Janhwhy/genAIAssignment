@@ -3,3 +3,6 @@
 __pycache__/
 .DS_Store
 case_history.json
+AI_Detective_Project_Explanation.pdf
+AI_Detective_Report.pdf
+.env.example
