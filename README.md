@@ -2,6 +2,8 @@
 
 Janhavi Bhattad · Activity-Based Assessment, Generative AI in Gaming
 
+Play it online: https://whodunitt.streamlit.app/
+
 AI Detective is a small mystery game. You pick a setting and a crime, and a language model writes a new case
 for you. There are eight ready-made settings, such as a Bollywood film set, an IPL final, a royal wedding or a
 Mars base. You can also type your own idea, or press "Surprise me" and let the AI choose. The crime can be a
